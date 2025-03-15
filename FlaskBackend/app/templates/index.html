@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Quality Prediction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Upload an Image for Quality Prediction</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data" class="mt-4">
+            <div class="form-group">
+                <input type="file" name="image" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+        <div class="mt-4">
+            <h2>Uploaded Images</h2>
+            <div id="uploaded-images" class="row">
+                <!-- Uploaded images will be displayed here -->
+            </div>
+        </div>
+    </div>
+    <script>
+        // JavaScript to dynamically load uploaded images can be added here
+    </script>
+</body>
+</html>
