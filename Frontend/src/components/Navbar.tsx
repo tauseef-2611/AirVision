@@ -1,7 +1,12 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { IconHome, IconMessage, IconUser, IconLogout, IconCloud } from "@tabler/icons-react";
 import { FloatingNav } from './ui/floating-navbar';
+
+type NavItem = {
+  name: string;
+  link: string;
+  action?: () => void;
+};
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,25 +21,26 @@ function Navbar() {
     window.location.href = '/';
   };
 
-  const navItems = [
+  const navItems: NavItem[] = [
     {
       name: "Home",
       link: "/",
-      icon: <IconHome className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
-      name: "AirCheck & Guide",
+      name: "AirCheck",
       link: "/upload-image",
-      icon: <IconCloud className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     isLoggedIn
-      && {
-          name: "Lung Health",
-          link: "/lung-health",
-          icon: <IconLogout className="h-4 w-4 text-neutral-500 dark:text-white" />, 
+      ? {
+          name: "Sign Out",
+          link: "/",
           action: handleLogout,
-      },
-  ];
+        }
+      : {
+          name: "Sign In",
+          link: "/signin",
+        },
+  ].filter(Boolean); // Filter out false values
 
   return <FloatingNav navItems={navItems} />;
 }

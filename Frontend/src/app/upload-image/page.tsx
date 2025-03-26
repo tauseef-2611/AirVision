@@ -11,7 +11,7 @@ import { MultiStepLoader as Loader } from "@/components/ui/multi-step-loader";
 import { IconSquareRoundedX } from "@tabler/icons-react";
 import { SparklesCore } from "@/components/ui/sparkles";
 
-type Prediction = "Weak" | "Moderate" | "Severe" | "Irrelevant";
+type Prediction = "Good" | "Moderate" | "Severe" | "Irrelevant";
 
 const loadingStates = [
   { text: "Uploading your breath's snapshot..." }, 
@@ -22,21 +22,31 @@ const loadingStates = [
 export default function UploadPage() {
   const router = useRouter();
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem('user');
+      return storedUser ? JSON.parse(storedUser) : null;
+    }
+    return null;
   });
   const [showUpload, setShowUpload] = useState(true);
   const [showImage, setShowImage] = useState(false);
-  const [showPrediction, setShowPrediction] = useState(false);
+  // const [lungHealth, setLungHealth] = useState<string | null>(null);
   const [isPredictionLoading, setIsPredictionLoading] = useState(false);
+  const [showPrediction, setShowPrediction] = useState(false);
   const [prediction, setPrediction] = useState<Prediction | null>(null);
   const [lungHealth, setLungHealth] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      toast.error("Please sign in to access this page");
-      router.push('/signin');
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+      if (!localStorage.getItem("token")) {
+        toast.error("Please sign in to access this page");
+        router.push('/signin');
+      }
     }
   }, [router]);
 
@@ -141,7 +151,7 @@ export default function UploadPage() {
 
   const getPredictionColor = (prediction: Prediction) => {
     switch (prediction) {
-      case "Weak":
+      case "Good":
         return "text-green-500";
       case "Moderate":
         return "text-yellow-500";

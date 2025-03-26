@@ -1,48 +1,22 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
 
-export const FloatingNav = ({ className }: { className?: string }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [navItems, setNavItems] = useState([
-    {
-      name: "Home",
-      link: "/",
-    },
-    {
-      name: "AirCheck & Guide",
-      link: "/upload-image",
-    },
-  ]);
+interface NavItem {
+  name: string;
+  link: string;
+  icon?: React.ReactNode;
+  action?: () => void;
+}
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      setIsLoggedIn(true);
-      console.log("Logged in");
-      setNavItems((prevItems) => {
-        // Check if "Lung Health" is already in the navItems
-        if (!prevItems.some(item => item.name === "Lung Health")) {
-          return [
-            ...prevItems,
-            {
-              name: "Lung Health",
-              link: "/lung-health",
-            },
-          ];
-        }
-        return prevItems;
-      });
-    }
-  }, []);
+interface FloatingNavProps {
+  className?: string;
+  navItems: NavItem[];
+}
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    window.location.href = "/";
-  };
-
+export const FloatingNav: React.FC<FloatingNavProps> = ({ className, navItems }) => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -58,28 +32,13 @@ export const FloatingNav = ({ className }: { className?: string }) => {
           <Link
             key={idx}
             href={navItem.link}
-            className="dark:text-neutral-50 text-neutral-600 hover:text-neutral-500"
+            className="dark:text-neutral-50 text-neutral-600 hover:text-neutral-500 flex items-center space-x-2"
+            onClick={navItem.action}
           >
-            {navItem.name}
+            {navItem.icon}
+            <span>{navItem.name}</span>
           </Link>
         ))}
-
-        {isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full"
-          >
-            <span>Signout</span>
-            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-          </button>
-        ) : (
-          <Link href="/signin">
-            <button className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
-              <span>Signin</span>
-              <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-            </button>
-          </Link>
-        )}
       </motion.div>
     </AnimatePresence>
   );

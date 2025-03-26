@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,7 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
       <Toaster position="top-right" />
-<FloatingNav />
+{/* <FloatingNav navItems={[]} />
+ */}
+ <Navbar />
 <div className="p-20">
 
                 {children}

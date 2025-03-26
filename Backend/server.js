@@ -40,18 +40,26 @@ apiRouter.post("/signup", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { data, error } = await supabase
-        .from("users")
-        .insert([{ email, password: hashedPassword, name, age, gender, smoker_status, occupation, allergies }])
-        .select("*") 
-        .single();   
+    try {
+        const { data, error } = await supabase
+            .from("users")
+            .insert([{ email, password: hashedPassword, name, age, gender, smoker_status, occupation, allergies }])
+            .select("*")
+            .single();
 
-    // 🔸 Handle errors
-    if (error) return res.status(400).json({ error: error.message });
+        if (error) {
+            console.log("Supabase error:", error);
+            return res.status(400).json({ error: error.message });
+        }
 
-    const token = generateToken(data);  
+        const token = generateToken(data);
+        console.log("Token", token);
 
-    res.json({ message: "User created successfully", token , data});
+        res.json({ message: "User created successfully", token, data });
+    } catch (err) {
+        console.log("Fetch error:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 apiRouter.post("/login", async (req, res) => {

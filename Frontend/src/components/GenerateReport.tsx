@@ -12,7 +12,7 @@ interface ReportProps {
     occupation?: string;
     allergies?: string;
   };
-  pollution_prediction?: "Weak" | "Moderate" | "Severe" | "Irrelevant"; 
+  pollution_prediction?: "Good" | "Moderate" | "Severe" | "Irrelevant"; 
   setLoading: (loading: boolean) => void;
 }
 

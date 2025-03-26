@@ -24,7 +24,7 @@ def predict_image_quality(img_path):
     elif p == 1:
         return "Moderate"
     elif p == 2:
-        return "Weak"
+        return "Good"
     elif p == 3:
         return "Severe"
 
